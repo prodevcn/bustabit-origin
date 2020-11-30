@@ -1,0 +1,68 @@
+{{##def.page_title = 'Thank you for joining' #}}
+
+{{##def.content:
+
+
+        <div class="register">
+
+                <input id="fp" name="user[fp]" type="hidden" value=""/>
+                <div class="row">
+                    <div class="large-12 columns input">
+                        <br>
+                        <h3>Thank you for registering!</h3>
+                        <p>Please save your details.</p>
+                        <hr>
+                    </div>
+
+                    <div class="large-12 columns input">
+
+                        <div class="row">
+                            <div class="large-3 columns">
+                                <label style="font-size: 1rem;" for="username">Username</label>
+                            </div>
+                            <div class="large-9 columns">
+                                <input id="username" type="text" name="user[name]" value="{{=it.username}}" autocomplete="off" pattern="[A-Za-z0-9_\-]{3,16}" style="font-weight: bold;" readonly required >
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="large-12 columns input">
+                        <div class="row">
+                            <div class="large-3 columns">
+                                <label style="font-size: 1rem;">Password</label>
+                            </div>
+                            <div class="large-9 columns">
+                                <input id="password" type="text" value="{{=it.password}}" name="user[password]" autocomplete="off" pattern=".{7,200}" style="font-weight: bold;" readonly required >
+                                <small>Store your password in a safe place.</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="large-12 columns input">
+
+                        <div class="row">
+                            <div class="large-3 columns">
+                                <label style="font-size: 1rem;" for="email">Recovery Email</label>
+                            </div>
+                            <div class="large-9 columns">
+                                <input type="email" id="email" value="{{=it.email}}" name="user[email]" style="font-weight: bold;" readonly autocomplete="off"/>
+                                {{? it.email == 0 }}
+                                <br>
+                                <p style="color: red;">Remember to save these details, because if you lose your password, you will lose your account.</p>
+                                <p>At any time you can add a <b>recovery e-mail</b> in your account settings.</p>
+                                {{?}}
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    </div>
+                    <div class="large-10 columns input">
+                        <a href="/play"><button class="button secondary right">I Agree, Let's Play</button></a>
+                    </div>
+                </div>
+        </div>
+
+
+<script src="{{? it.buildConfig }}/old/lib/fingerprintjs2/fingerprint2.min.js{{??}}/client_old/lib/fingerprintjs2/fingerprint2.min.js{{?}}"></script>
+<script>new Fingerprint2().get(function(fp){document.getElementById('fp').setAttribute('value',fp);});</script>
+#}}
+{{#def.include('./template/main_old')}}

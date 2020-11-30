@@ -1,0 +1,98 @@
+{{##def.page_title = 'Register' #}}
+
+{{##def.content:
+<script src='https://www.google.com/recaptcha/api.js'></script>
+<script type="text/javascript">
+    function enableSubmit() {
+        $('#loginSubmit').removeClass('secondary');
+    }
+
+    function randomPassword(len) {
+        var chars = "abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNP123456789";
+        if (window && window.crypto && window.crypto.getRandomValues && Uint32Array && Uint32Array.prototype.reduce) {
+            return window.crypto.getRandomValues(new Uint32Array(len))
+                .reduce(function(p, n) { return p + chars[n % chars.length] }, "");
+        } else {
+            console.warn('Falling back to pseudo-random client seed');
+            var pass = "";
+            for (var i = 0; i < len; ++i)
+                pass += chars[Math.floor(Math.random() * chars.length)];
+            return pass;
+        }
+    }
+
+
+    function generate() {
+        document.getElementById('password').value = randomPassword(10);
+    }
+</script>
+
+        <div class="register">
+            <form action="/register" method="post" onsubmit="return submitEnabled;">
+
+                <input id="fp" name="user[fp]" type="hidden" value=""/>
+                <div class="row">
+                    <div class="large-12 columns input">
+                        <br>
+                        <h3>Create a new account <small><a href="login">already have one?</a></small></h3>
+                        <hr>
+                    </div>
+
+                    <div class="large-12 columns input">
+
+                        <div class="row">
+                            <div class="large-3 columns">
+                                <label style="font-size: 1rem;" for="username">Username</label>
+                            </div>
+                            <div class="large-9 columns">
+                                <input id="username" type="text" name="user[name]" value="{{?it.values}}{{!it.values.name}}{{?}}" autocomplete="off" pattern="[A-Za-z0-9_\-]{3,16}" title="Username only allowed alphanumeric, hyphen and underscore" required />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="large-12 columns input">
+                        <div class="row">
+                            <div class="large-3 columns">
+                                <label style="font-size: 1rem;">Password</label>
+                            </div>
+                            <div class="large-7 columns">
+                                <input id="password" type="text" value="{{?it.values}}{{!it.values.password}}{{?}}" name="user[password]" autocomplete="off" pattern=".{7,200}" readonly required style="font-weight: bold;"/>
+                                <small>For your own security, we picked this strong and unique password for you. <b>Write it down!</b></small>
+                            </div>
+                            <div class="large-2 columns">
+                                <button type="button" onClick="generate();" tabindex="2" style="font-size: 0.875rem; background-color: #e58929; height: 2.3125rem; padding-top: 11px;"><i class="fa fa-refresh"></i> New </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="large-12 columns input">
+
+                        <div class="row">
+                            <div class="large-3 columns">
+                                <label style="font-size: 1rem;" for="email">*Recovery Email</label>
+                            </div>
+                            <div class="large-9 columns">
+                                <input type="email" id="email" value="{{?it.values}}{{!it.values.email}}{{?}}" placeholder="you@email.com" name="user[email]" autocomplete="off"/>
+                                <br>
+                                <p style="color: red;">Entering your e-mail is <b>optional</b>, but if you lose your password, <b>you will lose your account.
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="large-6 large-offset-6 columns input">
+                        <div class="g-recaptcha right" data-sitekey="{{=it.recaptchaKey}}" data-callback="enableSubmit"></div>
+                    </div>
+                    <div class="large-12 columns input">
+                        <input id="registerSubmit" class="button secondary right" type="submit" value="Register"/>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+<script type="text/javascript">
+    generate();
+</script>
+
+<script src="{{? it.buildConfig }}/old/lib/fingerprintjs2/fingerprint2.min.js{{??}}/client_old/lib/fingerprintjs2/fingerprint2.min.js{{?}}"></script>
+<script>new Fingerprint2().get(function(fp){document.getElementById('fp').setAttribute('value',fp);});</script>
+#}}
+{{#def.include('./template/main_old')}}
